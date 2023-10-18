@@ -16,14 +16,18 @@ local schema = {
         type = "record",
         fields = {
           -- a standard defined field (typedef), with some customizations
-          enable_on_request = {
-            type = "boolean",
-            default = false,
+          {
+            enable_on_request = {
+              type = "boolean",
+              default = false,
+            }
           }, -- adding a constraint for the value
-          enable_on_response = {
-            type = "boolean",
-            default = false,
-          }, -- adding a constraint for the value
+          {
+            enable_on_response = {
+              type = "boolean",
+              default = false,
+            }
+          },  -- adding a constraint for the value
         },
         entity_checks = {
           -- add some validation rules across fields
