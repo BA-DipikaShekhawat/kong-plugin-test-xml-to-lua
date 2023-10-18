@@ -15,7 +15,7 @@ function plugin:access(config)
   -- your custom code here
 
   if config.enable_on_request then
-    local initialRequest = kong.request.get_body()
+    local initialRequest = kong.request.get_raw_body()
     local xml = initialRequest
 
     --Instantiates the XML parser
@@ -45,8 +45,7 @@ function plugin:access(config)
 
     -- Convert the XML tree to a Lua table
     local lua_table = xml_tree_to_lua_table(handler.root)
-    kong.ctx.plugin.xmltojson=lua_table
-    kong.service.request.set_raw_body(json.encode(kong.ctx.plugin.xmltojson))
+    kong.service.request.set_raw_body(json.encode(lua_table))
 	kong.service.request.set_header("Content-Type", "application/json")
   end
 end
