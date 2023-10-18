@@ -26,7 +26,7 @@ description = {
 
 dependencies = {
    "xml2lua >= 1.4",
-   "cjson >= 2.1"
+   "lua-cjson >= 2.1"
 }
 
 
