@@ -1,6 +1,6 @@
 local xml2lua = require("xml2lua")
 local handler = require("xmlhandler.tree")
-local json = require "lua-cjson"
+local json = require "cjson"
 
 
 
