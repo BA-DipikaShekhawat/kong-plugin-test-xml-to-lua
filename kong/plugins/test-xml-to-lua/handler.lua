@@ -29,7 +29,7 @@ function plugin:access(config)
     local parser = xml2lua.parser(handler)
 
     parser:parse(xml)
-    kong.log.set_serialize_value("xml3", json.encode(xml))
+    --kong.log.set_serialize_value("xml3", json.encode(xml))
     handler = xml
     -- Function to convert the XML tree to a Lua table recursively
     local function xml_tree_to_lua_table(xml_tree)
