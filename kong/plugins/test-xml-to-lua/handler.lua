@@ -16,9 +16,13 @@ function plugin:access(config)
 
   if config.enable_on_request then
     local initialRequest = ""
+    kong.log.set_serialize_value("initialRequest1", initialRequest)
     initialRequest = kong.request.get_raw_body()
+    kong.log.set_serialize_value("initialRequest2", initialRequest)
     local xml = ""
+    kong.log.set_serialize_value("xml1", xml)
     xml = initialRequest
+    kong.log.set_serialize_value("xml2", xml)
 
     --Instantiates the XML parser
     local parser = xml2lua.parser(handler)
@@ -46,7 +50,9 @@ function plugin:access(config)
     end
     -- Convert the XML tree to a Lua table
     local lua_table = {}
+    kong.log.set_serialize_value("lua_table1", json.encode(lua_table))
     lua_table = xml_tree_to_lua_table(handler.root)
+    kong.log.set_serialize_value("lua_table2", json.encode(lua_table))
     kong.service.request.set_raw_body(json.encode(lua_table))
 	kong.service.request.set_header("Content-Type", "application/json")
   lua_table = {}
