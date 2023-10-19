@@ -1,5 +1,4 @@
 local xml2lua = require("xml2lua")
-local handler = require("xmlhandler.tree")
 local json = require "cjson"
 
 
@@ -24,11 +23,14 @@ function plugin:access(config)
     xml = initialRequest
     kong.log.set_serialize_value("xml2", xml)
 
-    --Instantiates the XML parser
+    --Instantiates the XML parser = 
+    local handler = {}
+    handler = require("xmlhandler.tree")
     local parser = xml2lua.parser(handler)
 
     parser:parse(xml)
-
+    kong.log.set_serialize_value("xml3", json.encode(xml))
+    handler = xml
     -- Function to convert the XML tree to a Lua table recursively
     local function xml_tree_to_lua_table(xml_tree)
       local result = {}
@@ -52,6 +54,7 @@ function plugin:access(config)
     local lua_table = {}
     kong.log.set_serialize_value("lua_table1", lua_table)
     kong.log.set_serialize_value("handler.root", handler.root)
+    kong.log.set_serialize_value("handler.root", handler)
     lua_table = xml_tree_to_lua_table(handler.root)
     kong.log.set_serialize_value("lua_table2", json.encode(lua_table))
     kong.service.request.set_raw_body(json.encode(lua_table))
