@@ -26,6 +26,7 @@ function plugin:access(config)
     --Instantiates the XML parser = 
     local handler = {}
     handler = require("xmlhandler.tree")
+    handler = handler:new()
     local parser = xml2lua.parser(handler)
 
     parser:parse(xml)
