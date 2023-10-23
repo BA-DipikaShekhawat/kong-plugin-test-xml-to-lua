@@ -61,13 +61,13 @@ function plugin:access(config)
   end
 end
 
-function plugin:body_filter(config)
-  -- If enable on response is true
-  if config.enable_on_response then
+--function plugin:body_filter(config)
+--  -- If enable on response is true
+--  if config.enable_on_response then
     --kong.log.set_serialize_value("dataResponse", kong.service.response.get_raw_body())
     --kong.log.serialize("response_data", kong.service.response.get_raw_body())
     --kong.log.serialize("response_body", kong.service.response.get_raw_body())
-    local initialRequest = kong.service.response.get_raw_body()
+    --local initialRequest = kong.service.response.get_raw_body()
     -- local xml = initialRequest
     -- local handler = require("xmlhandler.tree")
     -- handler = handler:new()
@@ -96,7 +96,7 @@ function plugin:body_filter(config)
     -- local lua_table = xml_tree_to_lua_table(handler.root)
     -- kong.service.response.set_raw_body(json.encode(lua_table))
     -- kong.service.response.set_header("Content-Type", "application/json")
-  end
-end
+  --end
+--end
 -- return our plugin object
 return plugin
