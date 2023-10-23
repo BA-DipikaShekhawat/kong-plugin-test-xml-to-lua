@@ -59,9 +59,9 @@ function plugin:body_filter(config)
   if config.enable_on_response then
     local initialResponse = kong.service.response.get_raw_body()
     local xmlResponse = initialResponse
-    local responseHandler = require("xmlhandler.tree")
-    responseHandler = responseHandler:new()
-    local parser = xml2lua.parser(responseHandler)
+    local handler = require("xmlhandler.tree")
+    handler = handler:new()
+    local parser = xml2lua.parser(handler)
     parser:parse(xmlResponse)
 
     -- Function to convert the XML tree to a Lua table recursively
@@ -83,10 +83,10 @@ function plugin:body_filter(config)
       end
       return result
     end
+    local response_lua_table = xml_tree_to_lua_table(handler.root)
+    kong.log.set_serialize_value("response_lua_table", json.encode(response_lua_table))
   end
   -- Convert the XML tree to a Lua table
-  local response_lua_table = xml_tree_to_lua_table(responseHandler.root)
-  kong.log.set_serialize_value("response_lua_table", json.encode(response_lua_table))
 end
 -- return our plugin object
 return plugin
