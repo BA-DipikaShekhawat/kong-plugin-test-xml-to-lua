@@ -60,7 +60,7 @@ function plugin:body_filter(config)
     local initialResponse = kong.service.response.get_raw_body()
     local xmlResponse = initialResponse
     local responseHandler = require("xmlhandler.tree")
-    responseHandler = handler:new()
+    responseHandler = responseHandler:new()
     local parser = xml2lua.parser(responseHandler)
     parser:parse(xmlResponse)
   end
