@@ -1,7 +1,7 @@
 local typedefs = require "kong.db.schema.typedefs"
 
 
-local PLUGIN_NAME = "test-xml-to-lua"
+local PLUGIN_NAME = "xml-json"
 
 
 local schema = {
