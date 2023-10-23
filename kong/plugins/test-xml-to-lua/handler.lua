@@ -55,6 +55,10 @@ function plugin:access(config)
   end
 end
 
+function plugin:header_filter(config)
+  kong.response.clear_header("Content-Length")
+end
+
 function plugin:body_filter(config)
   -- Implement logic for the body_filter phase here (http)
   if config.enable_on_response then
@@ -86,7 +90,7 @@ function plugin:body_filter(config)
     end
     local response_lua_table = xml_tree_to_lua_table(handler.root)
     --kong.response.set_raw_body(json.encode(response_lua_table))
-    kong.response.set_raw_body("response")
+    kong.response.set_raw_body(json.encode(response_lua_table))
     kong.log.set_serialize_value("response_lua_table", json.encode(response_lua_table))
     
   end
