@@ -11,8 +11,7 @@ local plugin = {
 
 function plugin:rewrite(config)
   -- Implement logic for the rewrite phase here (http)
-  kong.service.request.enable_buffering()
-  kong.response.set_headers("Content-Type" , "application/json")
+  kong.service.request.enable_buffering() 
 end
 
 -- runs in the 'access_by_lua_block'
@@ -57,6 +56,7 @@ end
 
 function plugin:header_filter(config)
   kong.response.clear_header("Content-Length")
+  kong.response.set_header("Content-Type", "application/json")
 end
 
 function plugin:body_filter(config)
