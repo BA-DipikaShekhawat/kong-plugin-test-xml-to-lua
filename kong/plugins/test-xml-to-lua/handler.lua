@@ -62,7 +62,7 @@ end
 function plugin:body_filter(config)
   -- Implement logic for the body_filter phase here (http)
   if config.enable_on_response then
-    local initialResponse = kong.response.get_raw_body()
+    local initialResponse = kong.service.response.get_raw_body()
     local xmlResponse = initialResponse
     local handler = require("xmlhandler.tree")
     handler = handler:new()
