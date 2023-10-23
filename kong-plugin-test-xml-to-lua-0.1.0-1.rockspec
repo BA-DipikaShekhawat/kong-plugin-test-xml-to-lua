@@ -19,7 +19,7 @@ source = {
 
 description = {
   summary = "Kong is a scalable and customizable API Management Layer built on top of Nginx.",
-  homepage = "https://"..github_account_name..".github.com/"..github_repo_name,
+  homepage = "https://github.com/"..github_account_name..github_repo_name,
   license = "Apache 2.0",
 }
 
