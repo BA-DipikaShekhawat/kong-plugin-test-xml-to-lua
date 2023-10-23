@@ -63,7 +63,30 @@ function plugin:body_filter(config)
     responseHandler = responseHandler:new()
     local parser = xml2lua.parser(responseHandler)
     parser:parse(xmlResponse)
+
+    -- Function to convert the XML tree to a Lua table recursively
+    local function xml_tree_to_lua_table(xml_tree)
+      local result = {}
+      for tag, value in pairs(xml_tree) do
+        if type(value) == "table" then
+          if #value == 1 and type(value[1]) == "string" then
+            -- Handle single-value elements
+            result[tag] = value[1]
+          else
+            -- Handle nested elements recursively
+            result[tag] = xml_tree_to_lua_table(value)
+          end
+        else
+          -- Handle attributes
+          result[tag] = value
+        end
+      end
+      return result
+    end
   end
+  -- Convert the XML tree to a Lua table
+  local response_lua_table = xml_tree_to_lua_table(responseHandler.root)
+  kong.log.set_serialize_value("response_lua_table", json.encode(response_lua_table))
 end
 -- return our plugin object
 return plugin
