@@ -12,6 +12,7 @@ local plugin = {
 function plugin:rewrite(config)
   -- Implement logic for the rewrite phase here (http)
   kong.service.request.enable_buffering()
+  kong.response.set_headers("Content-Type" , "application/json")
 end
 
 -- runs in the 'access_by_lua_block'
@@ -84,7 +85,7 @@ function plugin:body_filter(config)
       return result
     end
     local response_lua_table = xml_tree_to_lua_table(handler.root)
-    --kong.response.set_raw_body(json.encode(response_lua_table))
+    kong.response.set_raw_body(json.encode(response_lua_table))
     kong.log.set_serialize_value("response_lua_table", json.encode(response_lua_table))
     
   end
