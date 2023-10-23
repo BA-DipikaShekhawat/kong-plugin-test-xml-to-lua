@@ -9,13 +9,14 @@ local plugin = {
   VERSION = "0.1", -- version in X.Y.Z format. Check hybrid-mode compatibility requirements.
 }
 
+function CustomHandler:rewrite(config)
+  -- Implement logic for the rewrite phase here (http)
+  kong.service.request.enable_buffering()
+end
 
 -- runs in the 'access_by_lua_block'
 function plugin:access(config)
   -- your custom code here
-  kong.log.inspect.on()
-  kong.log.inspect(config) -- check the logs for a pretty-printed config!
-
   if config.enable_on_request then
     local initialRequest = kong.request.get_raw_body()
     local xml = initialRequest
@@ -52,5 +53,42 @@ function plugin:access(config)
   end
 end
 
+function CustomHandler:body_filter(config)
+  -- Implement logic for the body_filter phase here (http)
+  if config.enable_on_response then
+    local initialResponse = kong.service.response.get_raw_body()
+    local xmlResponse = initialResponse
+    local handler = require("xmlhandler.tree")
+    handler = handler:new()
+    --Instantiates the XML parser
+    local parser = xml2lua.parser(handler)
+
+    parser:parse(xmlResponse)
+
+    -- Function to convert the XML tree to a Lua table recursively
+    local function xml_tree_to_lua_table(xml_tree)
+      local result = {}
+      for tag, value in pairs(xml_tree) do
+        if type(value) == "table" then
+          if #value == 1 and type(value[1]) == "string" then
+            -- Handle single-value elements
+            result[tag] = value[1]
+          else
+            -- Handle nested elements recursively
+            result[tag] = xml_tree_to_lua_table(value)
+          end
+        else
+          -- Handle attributes
+          result[tag] = value
+        end
+      end
+      return result
+    end
+
+    -- Convert the XML tree to a Lua table
+    local lua_table = xml_tree_to_lua_table(handler.root)
+    kong.response.set_raw_body(json.encode(lua_table))
+  end
+end
 -- return our plugin object
 return plugin
