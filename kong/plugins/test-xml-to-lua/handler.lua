@@ -88,7 +88,6 @@ function plugin:body_filter(config)
     kong.log.set_serialize_value("response_lua_table", json.encode(response_lua_table))
     
   end
-  -- Convert the XML tree to a Lua table
 end
 -- return our plugin object
 return plugin
